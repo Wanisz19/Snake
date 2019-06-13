@@ -17,8 +17,30 @@ using namespace std;
     isfood=false;
     isgame=RUNNING;
     Points=0;
+    speed=0.5;
 
 resetMap();
+
+}
+
+void BoardSnake::colission(int x, int y)
+{
+
+     if(Board[x][y].HasHead==1 && Board[x][y].HasWall==1 &&Board[x][y].HasFood==0)
+            {
+                isgame=LOSE;
+            }
+
+                for( unsigned i=0; i<Snake.size(); i++ )
+                {
+                    if(i>3)
+                    {
+                    if(Snake[0].PositionX == Snake[i].PositionX && Snake[0].PositionY ==Snake[i].PositionY  )
+
+                    isgame=LOSE;
+                    }
+                }
+
 
 }
 
@@ -33,21 +55,29 @@ void BoardSnake::resetMap()
     {
         for(int idx=0;idx<BoardWidth;idx++)
         {
+            colission(idx,idy);
+            if(isgame==LOSE){exit(0);}
+
             if(idy==0 || idy==BoardHeight-1 || idx==0 || idx==BoardWidth-1)
             {
                 Board[idx][idy].HasWall=1;
             }
 
             else
-            //{
 
-           // Board[idx][idy].HasFood = 0;
+            Board[idx][idy].HasWall=0;
+            //Board[idx][idy].HasFood = 0;
             Board[idx][idy].HasHead = 0; // dlaczego bez  tych 2 deklaracji, waz bedzie sie ciagnał po całej mapie
             Board[idx][idy].HasBody = 0; //
 
-            if(Board[idx][idy].HasWall==1 && Board[idx][idy].HasHead==1) ///kolizja...
-            { isgame=LOSE; cout<<"PRZEGRANA";}
-            //}
+
+
+
+
+
+
+
+
         }
     }
 
@@ -87,7 +117,7 @@ for(int idy=0;idy<BoardHeight;idy++)
 
                     while(isfood !=true )
                     {
-                     x=rand()%(BoardWidth-2)+1;
+                    x=rand()%(BoardWidth-2)+1;
                     y=rand()%(BoardHeight-2)+1;
 
                     if(Board[x][y].HasBody==0 && Board[x][y].HasWall==0)
@@ -165,7 +195,7 @@ int BoardSnake::getboardheight() const
 
 
 
-void BoardSnake::eat()
+void BoardSnake::eat() // pomysł na funkcję był inspirowany
 {
     PositionFood();
 
@@ -236,32 +266,49 @@ void BoardSnake::moveSnake() //(direction way)
     }
 }
 
-void BoardSnake::stear()
+
+
+     void BoardSnake::ButtonPressed (sf::Event &event)
+     {
+
+     if (event.type == sf::Event::KeyPressed)
 {
-int kierunek;
-cin>>kierunek;
-
-        if(kierunek==1)
-        {
+    if (event.key.code == sf::Keyboard::W)
+    {   if(dis==DOWN){}
+        else
         dis=UP;
-        }
 
-        if(kierunek==2)
-        {
-        dis=RIGHT;
-        }
-        if(kierunek==3)
-        {
-        dis=DOWN;
-        }
-        if(kierunek==4)
-        {
+    }
+    if (event.key.code == sf::Keyboard::A)
+    {   if(dis==RIGHT){}
+        else
         dis=LEFT;
-        }
+    }
+    if (event.key.code == sf::Keyboard::D)
+    {   if(dis==LEFT){}
+        else
+        dis=RIGHT;
+    }
+    if (event.key.code == sf::Keyboard::S)
+    {   if(dis==UP){}
+        else
+        dis=DOWN;
+    }
+    if (event.key.code == sf::Keyboard::U)
+    {
+        if(speed<=0.5)
+        speed+=0.1;
 
+    }
 
+    if (event.key.code == sf::Keyboard::I)
+    {   if(speed>0.1)
+        speed-=0.05;
+
+    }
 
 }
+     }
 int BoardSnake::getfoodX() const
 {return foodX;}
 
@@ -272,35 +319,82 @@ int BoardSnake::getfoodY() const
 
 
 
-void BoardSnake::rozgrywka()
-{
-
-for(;;)
-{
-//PositionFood();
-cout<< getScore();
-eat();
-stear();
-debug_display();
-
-//int x=1000000;
-//usleep(x); //microsecunds
-
-moveSnake();
-resetMap();
 
 
 
-//std::system("clear");
-
-
-}
-
-}
 int BoardSnake::getScore() const
 {
 return Points;
 }
+
+int BoardSnake::getFieldinfo(int idx, int idy) const
+{
+
+
+      if(Board[idx][idy].HasBody==0 && Board[idx][idy].HasFood==1 && Board[idx][idy].HasWall==0 && Board[idx][idy].HasHead==0 )
+            {
+                return 'F';
+            }
+             if(Board[idx][idy].HasBody==0 && Board[idx][idy].HasFood==0 && Board[idx][idy].HasWall==0 && Board[idx][idy].HasHead==0)
+            {
+                return' ';
+            }
+
+
+             if(Board[idx][idy].HasBody==1 && Board[idx][idy].HasFood==0 && Board[idx][idy].HasWall==0)
+            {
+                return 'B';
+            }
+
+
+             if(Board[idx][idy].HasBody==0 && Board[idx][idy].HasFood==0 && Board[idx][idy].HasWall==1 )
+            {
+                return '#';
+            }
+
+              if(Board[idx][idy].HasBody==0 && Board[idx][idy].HasFood==0 && Board[idx][idy].HasWall==0 && Board[idx][idy].HasHead==1 )
+            {
+                return 'H';
+            }
+
+
+
+
+}
+
+
+game BoardSnake::getStatusGame()const
+    {
+        return isgame;
+
+
+    }
+
+      void BoardSnake::gameIsRunning()
+{
+ times = clocks.getElapsedTime();
+
+
+
+    if (times.asSeconds() >= speed)
+        {
+
+        //if(snake.isgame==RUNNING)
+        //{
+
+            moveSnake();
+            eat();
+            clocks.restart();
+            resetMap();
+
+
+        }
+
+
+}
+
+
+
 
 
 

@@ -1,19 +1,60 @@
 #include <iostream>
 #include "BoardSnake.h"
 #include <cstdlib>
+#include <SFML/Graphics.hpp>
+#include "BoardSnake.h"
+#include "MSSFMLVIEW.h"
+#include "SnakeController.h"
+#include <unistd.h>
+
 using namespace std;
 
 int main()
 {
-    srand(time(NULL));
-BoardSnake p(20,20);
+
+
+
+srand(time(NULL));
+BoardSnake p(30,30);
 //p.PositionFood();
-//cout<<p.getfoodX()<<endl;
-//cout<<p.getfoodY();
-p.rozgrywka();
-//p.PositionFood();
-p.debug_display();
+//p.debug_display();
+//p.rozgrywka();
+
+sf::RenderWindow window(sf::VideoMode(1000, 1000), "SNAKE");
+
+MSSFMLVIEW m(5,5,30,p);
+//SnakeController c(p,m);
+
+
+
+
+
+    while (window.isOpen())
+    {
+        // Process events
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // Close window : exit
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            p.ButtonPressed(event);
+           //m.ButtonPressed(event);
+
+        }
+
+
+        window.clear();
+
+        m.draw(window);
+
+        // Update the window
+        window.display();
+    }
+
 
 
     return 0;
 }
+

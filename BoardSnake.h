@@ -1,9 +1,12 @@
 #ifndef BOARDSNAKE_H
 #define BOARDSNAKE_H
+#include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 using namespace std;
 enum direction {UP, DOWN, LEFT, RIGHT};
 enum game {RUNNING, WIN, LOSE};
@@ -39,6 +42,9 @@ class BoardSnake
     game isgame;
     Position pos;
     direction dis;
+    sf::Event event;
+    sf::Time times;
+    sf::Clock clocks;
     std::vector <Position> Snake;
     State Board[100][100];
     int BoardWidth;
@@ -47,10 +53,12 @@ class BoardSnake
     int foodX;
     int foodY;
     int Points;
+    double speed;
 
 
     public:
 
+        game getStatusGame() const;
         BoardSnake(int BoardWidth, int BoardHeight);
         void resetMap();
         void PositionFood();
@@ -59,11 +67,14 @@ class BoardSnake
         int getboardheight()const;
         void moveSnake();
         void eat();
-        void stear();
-        void rozgrywka();
         int getfoodX() const;
         int getfoodY() const;
         int getScore()const;
+        int getFieldinfo(int idx, int idy) const;
+        void gameIsRunning();
+        void ButtonPressed (sf::Event &event);
+        void colission(int x, int y);
+
 
 
 
