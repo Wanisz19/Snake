@@ -16,18 +16,18 @@ struct State
 {
     bool HasFood;
     bool HasHead;
-     bool HasBody;
+    bool HasBody;
     bool HasWall;
 
 };
 
 struct Position
 {
-bool existing;
-int PositionX;
-int PositionY;
-int previousX;
-int previousY;
+    bool existing;
+    int PositionX;
+    int PositionY;
+    int previousX;
+    int previousY;
 
 
 };
@@ -56,24 +56,24 @@ class BoardSnake
     double speed;
 
 
-    public:
+public:
 
-        game getStatusGame() const;
-        BoardSnake(int BoardWidth, int BoardHeight);
-        void resetMap();
-        void PositionFood();
-        void debug_display() const;
-        int getboardwidth() const;
-        int getboardheight()const;
-        void moveSnake();
-        void eat();
-        int getfoodX() const;
-        int getfoodY() const;
-        int getScore()const;
-        int getFieldinfo(int idx, int idy) const;
-        void gameIsRunning();
-        void ButtonPressed (sf::Event &event);
-        void colission(int x, int y);
+    game getStatusGame() const;
+    BoardSnake(int BoardWidth, int BoardHeight);
+    void resetMap();
+    void PositionFood();
+    void debug_display() const;
+    int getboardwidth() const;
+    int getboardheight()const;
+    void moveSnake();
+    void eat();
+    int getfoodX() const;
+    int getfoodY() const;
+    int getScore()const;
+    int getFieldinfo(int idx, int idy) const;
+    void gameIsRunning();
+    void ButtonPressed (sf::Event &event);
+    void colission(int x, int y);
 
 
 
